@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+
 import { UserService } from '../user.service';
+import { User } from "../user";
 
 @Component({
   selector: 'app-home',
@@ -8,19 +10,16 @@ import { UserService } from '../user.service';
 })
 export class HomePage implements OnInit{
 
-  users: any[] = [];
+  users: User[] = [];
 
   constructor(private userService: UserService) {}
 
   ngOnInit(): void {
-    this.userService.loadUsersFromJson().subscribe(
-      (data) => {
-        this.userService.setUsers(data);
-        this.users = this.userService.getAllUsers();
-      },
-      (error) => {
-        console.error('Error loading users:', error);
-      }
-    );
+    this.getUsers();
+  }
+
+  getUsers(): void {
+    this.userService.getUsers()
+      .subscribe(users => this.users = users.slice(1, 5));
   }
 }

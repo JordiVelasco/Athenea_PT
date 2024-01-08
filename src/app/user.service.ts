@@ -1,7 +1,10 @@
-import { Injectable  } from '@angular/core';
-import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
+import { Observable, of } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
+
+import { User } from "./user";
 
 @Injectable({
     providedIn: 'root'
@@ -9,20 +12,31 @@ import { map } from 'rxjs/operators';
 
 export class UserService  {
 
-  private users: any[] = [];
+  private usersUrl = 'assets/users.json';
+  httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  };
 
   constructor(private http: HttpClient) { }
 
-  loadUsersFromJson(): Observable<any[]> {
-    return this.http.get<any[]>('assets/users.json');
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(this.usersUrl)
   }
 
-  getAllUsers(): any[] {
-    return this.users;
+  getUser(id: string): Observable<User> {
+    return this.getUsers().pipe(
+      map(users => {
+        const user = users.find(u => u.id.toString() === id.toString());
+        if (!user) {
+          throw new Error(`User with DNI ${id} not found`);
+        }
+        return user;
+      })
+    );
   }
-  
-  setUsers(users: any[]): void {
-    this.users = users;
+
+  updateUser(user: User): Observable<any> {
+    return this.http.put(this.usersUrl, user);
   }
 
 }
