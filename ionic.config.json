@@ -1,0 +1,7 @@
+{
+  "name": "Athenea_PT",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
