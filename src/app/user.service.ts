@@ -12,12 +12,49 @@ import { User } from "./user";
 
 export class UserService  {
 
+  private user: any[] = [];
   private usersUrl = 'assets/users.json';
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
 
   constructor(private http: HttpClient) { }
+
+  getAllNewUsers(): any[] {
+    return this.user;
+  }
+
+  getUserId(id: number): any {
+    return id;
+  }
+
+  addUser(user: any): void {
+    user.id = this.getNextId();
+    this.user.push(user);
+  }
+
+  updateNewUser(user: any): void {
+    const index = this.user.findIndex(h => h.id === user.id);
+    if (index !== -1) {
+      this.user[index] = user;
+    }
+  }
+
+  private getNextId(): number {
+    const maxId = Math.max(...this.user.map(h => h.id), 0);
+    return maxId + 1;
+  }
+
+  deleteService(user: any): void {
+    const index: number = this.user.findIndex(h => h.id === user.id);
+    if (index !== -1) {
+      this.user.splice(index, 1);
+    }
+  }
+
+  searchService(filter: string): any{
+    return this.getAllNewUsers().filter( user => user.name.includes(filter))
+  }
 
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.usersUrl)
