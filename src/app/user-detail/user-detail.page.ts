@@ -27,24 +27,10 @@ export class UserDetailPage implements OnInit {
   getUser(): void {
     const id = this.route.snapshot.paramMap.get('id');
     this.userService.getUser(id!).subscribe(
-      (user) => {
-        this.user = user;
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
+      user => this.user = user);
   }
 
   goBack(): void {
     this.location.back();
   }
-
-  save(): void {
-    if (this.user) {
-      this.userService.updateUser(this.user)
-        .subscribe(() => this.goBack());
-    }
-  }
-
 }

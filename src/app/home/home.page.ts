@@ -37,14 +37,15 @@ export class HomePage implements OnInit{
 
   saveUser(): void {
     if (this.selectedUser && this.selectedUser.id) {
-      this.userService.updateUser(this.selectedUser);
+      this.userService.updateNewUser(this.selectedUser);
     } else {
       this.userService.addUser(this.selectedUser);
     }
+    this.users = [...this.users, { ...this.selectedUser }];
     this.selectedUser = {};
-    this.users = this.userService.getAllNewUsers();
     this.showForm = false;
   }
+  
 
   cancel(): void { 
     this.selectedUser = {}; 

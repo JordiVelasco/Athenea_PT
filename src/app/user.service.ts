@@ -30,7 +30,7 @@ export class UserService  {
 
   addUser(user: any): void {
     user.id = this.getNextId();
-    this.user.push(user);
+    this.user = [...this.user, user];
   }
 
   updateNewUser(user: any): void {

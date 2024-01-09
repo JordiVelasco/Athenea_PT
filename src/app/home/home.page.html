@@ -18,6 +18,9 @@
     <ion-item>
       <ion-label position="stacked">Nombre:</ion-label>
       <ion-input type="text" name="heroName" [(ngModel)]="selectedUser.name" required></ion-input>
+      <ion-input type="text" name="heroName" [(ngModel)]="selectedUser.surname" required></ion-input>
+      <ion-input type="text" name="heroName" [(ngModel)]="selectedUser.email" required></ion-input>
+      <ion-input type="text" name="heroName" [(ngModel)]="selectedUser.id" required></ion-input>
     </ion-item>
     <ion-button expand="full" (click)="saveUser()">Guardar</ion-button>
     <ion-button expand="full" (click)="cancel()">Cancelar</ion-button>
