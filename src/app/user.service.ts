@@ -57,9 +57,9 @@ export class UserService  {
   getUser(id: string): Observable<User> {
     return this.getUsers().pipe(
       map(users => {
-        const user = users.find(u => u.id.toString() === id.toString());
+        const user = users.find(u => u.id === id);
         if (!user) {
-          return this.user.find(u => u.id.toString() === id.toString());
+          return this.user.find(u => u.id === id);
         }
         return user;
       })
