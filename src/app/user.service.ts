@@ -29,7 +29,6 @@ export class UserService  {
   }
 
   addUser(user: any): void {
-    user.id = this.getNextId();
     this.user = [...this.user, user];
   }
 
@@ -38,11 +37,6 @@ export class UserService  {
     if (index !== -1) {
       this.user[index] = user;
     }
-  }
-
-  private getNextId(): number {
-    const maxId = Math.max(...this.user.map(h => h.id), 0);
-    return maxId + 1;
   }
 
   deleteService(user: any): void {
@@ -65,7 +59,7 @@ export class UserService  {
       map(users => {
         const user = users.find(u => u.id.toString() === id.toString());
         if (!user) {
-          throw new Error(`User with DNI ${id} not found`);
+          return this.user.find(u => u.id.toString() === id.toString());
         }
         return user;
       })
