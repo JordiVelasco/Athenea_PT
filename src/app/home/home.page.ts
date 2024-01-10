@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf'
+import autoTable from 'jspdf-autotable'
+import { ModalController } from '@ionic/angular';
 
 import { UserService } from '../user.service';
 import { User } from "../user";
@@ -20,6 +24,8 @@ export class HomePage implements OnInit{
   filterEmailValue: string = '';
   filterIdValue: string = '';
 
+  @ViewChild('table', { static: false }) table!: ElementRef<any>;
+
   constructor(private userService: UserService) {}
 
   ngOnInit(): void {
@@ -31,7 +37,30 @@ export class HomePage implements OnInit{
       .subscribe(users => this.users = users);
   }
 
-  searchUser(): void {
+  exportToExcel(): void {
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.getCurrentPageItems());
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, 'usuarios.xlsx');
+  }
+
+  exportToPDF(): void {
+    const data = this.table.nativeElement;
+
+    const pdf = new jsPDF();
+
+    pdf.text('Llista Usuaris', 10, 10);
+
+    autoTable(pdf, {startY: 20,
+      head: [['Nom', 'Cognom', 'Email', 'DNI']],
+      body: this.filterValueUsers.length !== 0 ? this.filterValueUsers.map(user => [user.name, user.surname, user.email, user.id]) : this.users.map(user => [user.name, user.surname, user.email, user.id]),
+    })
+
+    pdf.save('usuarios.pdf');
+  }
+
+  getCurrentPageItems(): User[] {
+    return this.filterValueUsers.length !== 0 ? this.filterValueUsers : this.users;
   }
 
   addUser(): void {

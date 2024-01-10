@@ -5,34 +5,46 @@
 </ion-header>
 
 <ion-content>
-  <ion-input type="text" placeholder="Nom" (keyup) = "searchByName($event)"></ion-input>
-  <ion-input type="text" placeholder="Cognom" (keyup) = "searchBySurname($event)"></ion-input>
-  <ion-input type="text" placeholder="Email" (keyup) = "searchByEmail($event)"></ion-input>
-  <ion-input type="text" placeholder="DNI" (keyup) = "searchById($event)"></ion-input>
-  <ion-list *ngIf = "filterValueUsers.length == 0 && filterNameValue == '' && filterSurnameValue == '' && filterEmailValue == '' && filterIdValue == ''">
-    <ion-item *ngFor="let user of users" [routerLink]="['/user-detail', user.id]">
-      {{user.name}}
-    </ion-item>
-  </ion-list>
-  <ion-list *ngIf = "filterValueUsers.length != 0">
-    <ion-item *ngFor="let user of filterValueUsers" [routerLink]="['/user-detail', user.id]">
-      {{user.name}}
-    </ion-item>
-  </ion-list>
-</ion-content>
-
-<ion-content *ngIf="showForm">
-  <h3>Añadir Nuevo Usuari</h3>
-  <form>
+  <ion-list>
     <ion-item>
-      <ion-label position="stacked">Nombre:</ion-label>
-      <ion-input type="text" name="heroName" [(ngModel)]="selectedUser.name" required></ion-input>
-      <ion-input type="text" name="heroName" [(ngModel)]="selectedUser.surname" required></ion-input>
-      <ion-input type="text" name="heroName" [(ngModel)]="selectedUser.email" required></ion-input>
-      <ion-input type="text" name="heroName" [(ngModel)]="selectedUser.id" required></ion-input>
+      <ion-button (click)="exportToExcel()">Exportar a Excel</ion-button>
+      <ion-button (click)="exportToPDF()">Exportar a PDF</ion-button>
     </ion-item>
-    <ion-button expand="full" (click)="saveUser()">Guardar</ion-button>
-    <ion-button expand="full" (click)="cancel()">Cancelar</ion-button>
-  </form>
+  </ion-list>
+
+  <ion-input type="text" placeholder="Nom" (keyup)="searchByName($event)"></ion-input>
+  <ion-input type="text" placeholder="Cognom" (keyup)="searchBySurname($event)"></ion-input>
+  <ion-input type="text" placeholder="Email" (keyup)="searchByEmail($event)"></ion-input>
+  <ion-input type="text" placeholder="DNI" (keyup)="searchById($event)"></ion-input>
+
+  <ion-list *ngIf="filterValueUsers.length === 0 && filterNameValue === '' && filterSurnameValue === '' && filterEmailValue === '' && filterIdValue === ''">
+    <ion-item *ngFor="let user of users" [routerLink]="['/user-detail', user.id]">
+      {{ user.name }}
+    </ion-item>
+  </ion-list>
+
+  <ion-list *ngIf="filterValueUsers.length !== 0">
+    <ion-item *ngFor="let user of filterValueUsers" [routerLink]="['/user-detail', user.id]">
+      {{ user.name }}
+    </ion-item>
+  </ion-list>
+  
+  <table #table>
+  </table>
+
 </ion-content>
 
+  <ion-content *ngIf="showForm">
+    <h3>Añadir Nuevo Usuari</h3>
+    <form>
+      <ion-item>
+        <ion-label position="stacked">Nombre:</ion-label>
+        <ion-input type="text" name="heroName" [(ngModel)]="selectedUser.name" required></ion-input>
+        <ion-input type="text" name="heroName" [(ngModel)]="selectedUser.surname" required></ion-input>
+        <ion-input type="text" name="heroName" [(ngModel)]="selectedUser.email" required></ion-input>
+        <ion-input type="text" name="heroName" [(ngModel)]="selectedUser.id" required></ion-input>
+      </ion-item>
+      <ion-button expand="full" (click)="saveUser()">Guardar</ion-button>
+      <ion-button expand="full" (click)="cancel()">Cancelar</ion-button>
+    </form>
+  </ion-content>
