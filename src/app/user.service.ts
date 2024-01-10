@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 import { Observable} from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -14,9 +14,6 @@ export class UserService  {
 
   private user: any[] = [];
   private usersUrl = 'assets/users.json';
-  httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-  };
 
   constructor(private http: HttpClient) { }
 
