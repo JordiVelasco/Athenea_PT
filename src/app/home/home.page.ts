@@ -1,7 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import * as XLSX from 'xlsx';
-import jsPDF from 'jspdf'
-import autoTable from 'jspdf-autotable'
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import { IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
 
@@ -13,10 +13,8 @@ import { User } from "../user";
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage implements OnInit{
-
+export class HomePage implements OnInit {
   users: User[] = [];
-  newUser: any[] = [];
   filterValueUsers: User[] = [];
   showForm = true;
   selectedUser: any = {};
@@ -37,13 +35,15 @@ export class HomePage implements OnInit{
 
   getUsers(): void {
     this.userService.getUsers()
-      .subscribe(users => this.users = users);
+      .subscribe(users => {
+        this.users = users;
+        this.filter();
+      });
   }
-  
+
   onWillDismiss(event: Event) {
     const ev = event as CustomEvent<OverlayEventDetail<string>>;
     if (ev.detail.role === 'confirm') {
-      this.addUser();
     }
   }
 
@@ -51,7 +51,7 @@ export class HomePage implements OnInit{
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.getCurrentPageItems());
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'usuarios.xlsx');
+    XLSX.writeFile(wb, 'usuaris.xlsx');
   }
 
   exportToPDF(): void {
@@ -61,12 +61,13 @@ export class HomePage implements OnInit{
 
     pdf.text('Llista Usuaris', 10, 10);
 
-    autoTable(pdf, {startY: 20,
+    autoTable(pdf, {
+      startY: 20,
       head: [['Nom', 'Cognom', 'Email', 'DNI']],
-      body: this.filterValueUsers.length !== 0 ? this.filterValueUsers.map(user => [user.name, user.surname, user.email, user.id]) : this.users.map(user => [user.name, user.surname, user.email, user.id]),
-    })
+      body: this.filterValueUsers.map(user => [user.name, user.surname, user.email, user.id]),
+    });
 
-    pdf.save('usuarios.pdf');
+    pdf.save('usuaris.pdf');
   }
 
   getCurrentPageItems(): User[] {
@@ -83,36 +84,39 @@ export class HomePage implements OnInit{
     this.users = [...this.users, { ...this.selectedUser }];
     this.selectedUser = {};
     this.showForm = true;
+    this.filter();
   }
-  
-  searchByName(filterName: any): any{
+
+  searchByName(filterName: any): void {
     this.filterNameValue = filterName.target.value;
     this.filter();
   }
-  searchBySurname(filterSurname: any): any{
+
+  searchBySurname(filterSurname: any): void {
     this.filterSurnameValue = filterSurname.target.value;
     this.filter();
   }
-  searchByEmail(filterEmail: any): any{
+
+  searchByEmail(filterEmail: any): void {
     this.filterEmailValue = filterEmail.target.value;
     this.filter();
   }
-  searchById(filterId: any): any{
+
+  searchById(filterId: any): void {
     this.filterIdValue = filterId.target.value;
     this.filter();
   }
 
-  filter(): void{
-    this.filterValueUsers = this.users.filter( user => 
+  filter(): void {
+    this.filterValueUsers = this.users.filter(user => 
       user.name.includes(this.filterNameValue) && 
-      user.surname.includes(this.filterSurnameValue)&& 
-      user.name.includes(this.filterEmailValue) && 
+      user.surname.includes(this.filterSurnameValue) && 
+      user.email.includes(this.filterEmailValue) && 
       user.id.includes(this.filterIdValue)
-    )   
+    );
   }
 
-  cancel(): void { 
-    this.selectedUser = {}; 
-    this.showForm = false;
+  cancel(): void {
+    this.modal.dismiss(null, 'cancel');
   }
 }

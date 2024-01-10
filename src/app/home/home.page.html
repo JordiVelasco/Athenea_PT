@@ -30,22 +30,19 @@
   </ion-list>
   
   <table #table>
-    <!-- Aquí puedes agregar el contenido de la tabla si es necesario -->
   </table>
-
 </ion-content>
 
 <ion-button id="open-modal" expand="block">Afegir nou usuari</ion-button>
 <ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
   <ion-content *ngIf="showForm">
-    <h3>Añadir Nuevo Usuari</h3>
+    <h3>Afegir Nou Usuari</h3>
     <form>
       <ion-item>
-        <ion-label position="stacked">Nombre:</ion-label>
-        <ion-input type="text" name="heroName" [(ngModel)]="selectedUser.name" required></ion-input>
-        <ion-input type="text" name="heroName" [(ngModel)]="selectedUser.surname" required></ion-input>
-        <ion-input type="text" name="heroName" [(ngModel)]="selectedUser.email" required></ion-input>
-        <ion-input type="text" name="heroName" [(ngModel)]="selectedUser.id" required></ion-input>
+        <ion-input type="text"  placeholder="Nom" name="userName" [(ngModel)]="selectedUser.name" required></ion-input>
+        <ion-input type="text"  placeholder="Cognom" name="userSurname" [(ngModel)]="selectedUser.surname" required></ion-input>
+        <ion-input type="text"  placeholder="Email" name="userEmail" [(ngModel)]="selectedUser.email" required></ion-input>
+        <ion-input type="text"  placeholder="DNI" name="userDNI" [(ngModel)]="selectedUser.id" required></ion-input>
       </ion-item>
       <ion-button (click)="confirm()" [strong]="true">Confirm</ion-button>
       <ion-button (click)="cancel()">Cancel</ion-button>
