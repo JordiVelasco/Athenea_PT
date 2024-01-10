@@ -30,10 +30,13 @@
   </ion-list>
   
   <table #table>
+    <!-- Aquí puedes agregar el contenido de la tabla si es necesario -->
   </table>
 
 </ion-content>
 
+<ion-button id="open-modal" expand="block">Afegir nou usuari</ion-button>
+<ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
   <ion-content *ngIf="showForm">
     <h3>Añadir Nuevo Usuari</h3>
     <form>
@@ -44,7 +47,8 @@
         <ion-input type="text" name="heroName" [(ngModel)]="selectedUser.email" required></ion-input>
         <ion-input type="text" name="heroName" [(ngModel)]="selectedUser.id" required></ion-input>
       </ion-item>
-      <ion-button expand="full" (click)="saveUser()">Guardar</ion-button>
-      <ion-button expand="full" (click)="cancel()">Cancelar</ion-button>
+      <ion-button (click)="confirm()" [strong]="true">Confirm</ion-button>
+      <ion-button (click)="cancel()">Cancel</ion-button>
     </form>
   </ion-content>
+</ion-modal>

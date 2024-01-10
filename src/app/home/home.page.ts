@@ -2,7 +2,8 @@ import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
-import { ModalController } from '@ionic/angular';
+import { IonModal } from '@ionic/angular';
+import { OverlayEventDetail } from '@ionic/core/components';
 
 import { UserService } from '../user.service';
 import { User } from "../user";
@@ -23,8 +24,10 @@ export class HomePage implements OnInit{
   filterSurnameValue: string = '';
   filterEmailValue: string = '';
   filterIdValue: string = '';
+  name: string = '';
 
   @ViewChild('table', { static: false }) table!: ElementRef<any>;
+  @ViewChild(IonModal) modal!: IonModal;
 
   constructor(private userService: UserService) {}
 
@@ -35,6 +38,13 @@ export class HomePage implements OnInit{
   getUsers(): void {
     this.userService.getUsers()
       .subscribe(users => this.users = users);
+  }
+  
+  onWillDismiss(event: Event) {
+    const ev = event as CustomEvent<OverlayEventDetail<string>>;
+    if (ev.detail.role === 'confirm') {
+      this.addUser();
+    }
   }
 
   exportToExcel(): void {
@@ -67,8 +77,8 @@ export class HomePage implements OnInit{
     this.showForm = true;
   }
 
-  saveUser(): void {
-    console.log(this.selectedUser);
+  confirm(): void {
+    this.modal.dismiss(this.name, 'confirm');
     this.userService.addUser(this.selectedUser);
     this.users = [...this.users, { ...this.selectedUser }];
     this.selectedUser = {};
