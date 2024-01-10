@@ -12,9 +12,13 @@ export class HomePage implements OnInit{
 
   users: User[] = [];
   newUser: any[] = [];
-  filterValue = '';
+  filterValueUsers: User[] = [];
   showForm = true;
   selectedUser: any = {};
+  filterNameValue: string = '';
+  filterSurnameValue: string = '';
+  filterEmailValue: string = '';
+  filterIdValue: string = '';
 
   constructor(private userService: UserService) {}
 
@@ -28,7 +32,6 @@ export class HomePage implements OnInit{
   }
 
   searchUser(): void {
-    this.users = this.userService.searchService(this.filterValue);
   }
 
   addUser(): void {
@@ -40,9 +43,34 @@ export class HomePage implements OnInit{
     this.userService.addUser(this.selectedUser);
     this.users = [...this.users, { ...this.selectedUser }];
     this.selectedUser = {};
-    this.showForm = false;
+    this.showForm = true;
   }
   
+  searchByName(filterName: any): any{
+    this.filterNameValue = filterName.target.value;
+    this.filter();
+  }
+  searchBySurname(filterSurname: any): any{
+    this.filterSurnameValue = filterSurname.target.value;
+    this.filter();
+  }
+  searchByEmail(filterEmail: any): any{
+    this.filterEmailValue = filterEmail.target.value;
+    this.filter();
+  }
+  searchById(filterId: any): any{
+    this.filterIdValue = filterId.target.value;
+    this.filter();
+  }
+
+  filter(): void{
+    this.filterValueUsers = this.users.filter( user => 
+      user.name.includes(this.filterNameValue) && 
+      user.surname.includes(this.filterSurnameValue)&& 
+      user.name.includes(this.filterEmailValue) && 
+      user.id.includes(this.filterIdValue)
+    )   
+  }
 
   cancel(): void { 
     this.selectedUser = {}; 
