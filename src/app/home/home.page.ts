@@ -23,22 +23,35 @@ export class HomePage implements OnInit {
   filterEmailValue: string = '';
   filterIdValue: string = '';
   name: string = '';
+  columnaOrdenada: string = '';
+  ordenAscendente: boolean = true;
+  usersList: any[] = [];
 
   @ViewChild('table', { static: false }) table!: ElementRef<any>;
   @ViewChild(IonModal) modal!: IonModal;
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService) { }
 
   ngOnInit(): void {
     this.getUsers();
+    this.ordenarPor();
   }
 
-  getUsers(): void {
+  getUsers(): any {
     this.userService.getUsers()
       .subscribe(users => {
         this.users = users;
         this.filter();
       });
+  }
+
+  ordenarPor() {
+    this.usersList = this.getCurrentPageItems();
+    this.ordenAscendente = !this.ordenAscendente;
+    this.usersList.sort((a, b) => {
+      const factor = this.ordenAscendente ? 1 : -1;
+      return String(a.name).localeCompare(String(b.name)) * factor;
+    });
   }
 
   onWillDismiss(event: Event) {
@@ -108,10 +121,10 @@ export class HomePage implements OnInit {
   }
 
   filter(): void {
-    this.filterValueUsers = this.users.filter(user => 
-      user.name.includes(this.filterNameValue) && 
-      user.surname.includes(this.filterSurnameValue) && 
-      user.email.includes(this.filterEmailValue) && 
+    this.filterValueUsers = this.users.filter(user =>
+      user.name.includes(this.filterNameValue) &&
+      user.surname.includes(this.filterSurnameValue) &&
+      user.email.includes(this.filterEmailValue) &&
       user.id.includes(this.filterIdValue)
     );
   }

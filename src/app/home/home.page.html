@@ -16,22 +16,23 @@
   <ion-input type="text" placeholder="Cognom" (keyup)="searchBySurname($event)"></ion-input>
   <ion-input type="text" placeholder="Email" (keyup)="searchByEmail($event)"></ion-input>
   <ion-input type="text" placeholder="DNI" (keyup)="searchById($event)"></ion-input>
+  <ion-grid #table>
+    <th (click)="ordenarPor()">Nom: </th>
+    <ion-list
+      *ngIf="filterValueUsers.length === 0 && filterNameValue === '' && filterSurnameValue === '' && filterEmailValue === '' && filterIdValue === ''">
+      <ion-item *ngFor="let user of users" [routerLink]="['/user-detail', user.id]">
+        {{ user.name }}
+      </ion-item>
+    </ion-list>
 
-  <ion-list *ngIf="filterValueUsers.length === 0 && filterNameValue === '' && filterSurnameValue === '' && filterEmailValue === '' && filterIdValue === ''">
-    <ion-item *ngFor="let user of users" [routerLink]="['/user-detail', user.id]">
-      {{ user.name }}
-    </ion-item>
-  </ion-list>
-
-  <ion-list *ngIf="filterValueUsers.length !== 0">
-    <ion-item *ngFor="let user of filterValueUsers" [routerLink]="['/user-detail', user.id]">
-      {{ user.name }}
-    </ion-item>
-  </ion-list>
-  
-  <table #table>
-  </table>
+    <ion-list *ngIf="filterValueUsers.length !== 0">
+      <ion-item *ngFor="let user of filterValueUsers" [routerLink]="['/user-detail', user.id]">
+        {{ user.name }}
+      </ion-item>
+    </ion-list>
+  </ion-grid>
 </ion-content>
+
 
 <ion-button id="open-modal" expand="block">Afegir nou usuari</ion-button>
 <ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
@@ -39,10 +40,12 @@
     <h3>Afegir Nou Usuari</h3>
     <form>
       <ion-item>
-        <ion-input type="text"  placeholder="Nom" name="userName" [(ngModel)]="selectedUser.name" required></ion-input>
-        <ion-input type="text"  placeholder="Cognom" name="userSurname" [(ngModel)]="selectedUser.surname" required></ion-input>
-        <ion-input type="text"  placeholder="Email" name="userEmail" [(ngModel)]="selectedUser.email" required></ion-input>
-        <ion-input type="text"  placeholder="DNI" name="userDNI" [(ngModel)]="selectedUser.id" required></ion-input>
+        <ion-input type="text" placeholder="Nom" name="userName" [(ngModel)]="selectedUser.name" required></ion-input>
+        <ion-input type="text" placeholder="Cognom" name="userSurname" [(ngModel)]="selectedUser.surname"
+          required></ion-input>
+        <ion-input type="text" placeholder="Email" name="userEmail" [(ngModel)]="selectedUser.email"
+          required></ion-input>
+        <ion-input type="text" placeholder="DNI" name="userDNI" [(ngModel)]="selectedUser.id" required></ion-input>
       </ion-item>
       <ion-button (click)="confirm()" [strong]="true">Confirm</ion-button>
       <ion-button (click)="cancel()">Cancel</ion-button>
