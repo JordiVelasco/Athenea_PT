@@ -16,6 +16,7 @@
   <ion-input type="text" placeholder="Cognom" (keyup)="searchBySurname($event)"></ion-input>
   <ion-input type="text" placeholder="Email" (keyup)="searchByEmail($event)"></ion-input>
   <ion-input type="text" placeholder="DNI" (keyup)="searchById($event)"></ion-input>
+  
   <ion-grid #table>
     <th (click)="ordenarPor()">Nom: </th>
     <ion-list

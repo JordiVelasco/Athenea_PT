@@ -24,7 +24,7 @@ export class HomePage implements OnInit {
   filterIdValue: string = '';
   name: string = '';
   columnaOrdenada: string = '';
-  ordenAscendente: boolean = false;
+  ordenAscendente: boolean = true;
   usersList: any[] = [];
 
   @ViewChild('table', { static: false }) table!: ElementRef<any>;
