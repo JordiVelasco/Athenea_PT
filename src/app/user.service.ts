@@ -17,34 +17,8 @@ export class UserService  {
 
   constructor(private http: HttpClient) { }
 
-  getAllNewUsers(): any[] {
-    return this.user;
-  }
-
-  getUserId(id: number): any {
-    return id;
-  }
-
   addUser(user: any): void {
     this.user = [...this.user, user];
-  }
-
-  updateNewUser(user: any): void {
-    const index = this.user.findIndex(h => h.id === user.id);
-    if (index !== -1) {
-      this.user[index] = user;
-    }
-  }
-
-  deleteService(user: any): void {
-    const index: number = this.user.findIndex(h => h.id === user.id);
-    if (index !== -1) {
-      this.user.splice(index, 1);
-    }
-  }
-
-  searchService(filter: string): any{
-    return this.getAllNewUsers().filter( user => user.name.includes(filter))
   }
 
   getUsers(): Observable<User[]> {
@@ -62,9 +36,4 @@ export class UserService  {
       })
     );
   }
-
-  updateUser(user: User): Observable<any> {
-    return this.http.put(this.usersUrl, user);
-  }
-
 }
