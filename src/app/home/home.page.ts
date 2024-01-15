@@ -24,7 +24,7 @@ export class HomePage implements OnInit {
   filterIdValue: string = '';
   name: string = '';
   columnaOrdenada: string = '';
-  ordenAscendente: boolean = true;
+  ordenAscendente: boolean = false;
   usersList: any[] = [];
 
   @ViewChild('table', { static: false }) table!: ElementRef<any>;
@@ -34,7 +34,6 @@ export class HomePage implements OnInit {
 
   ngOnInit(): void {
     this.getUsers();
-    this.ordenarPor();
   }
 
   getUsers(): any {
@@ -68,18 +67,13 @@ export class HomePage implements OnInit {
   }
 
   exportToPDF(): void {
-    const data = this.table.nativeElement;
-
     const pdf = new jsPDF();
-
     pdf.text('Llista Usuaris', 10, 10);
-
     autoTable(pdf, {
       startY: 20,
       head: [['Nom', 'Cognom', 'Email', 'DNI']],
       body: this.filterValueUsers.map(user => [user.name, user.surname, user.email, user.id]),
     });
-
     pdf.save('usuaris.pdf');
   }
 
